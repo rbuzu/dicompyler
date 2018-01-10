@@ -72,16 +72,16 @@ class plugin:
         if os.path.exists(mask_path):
             self.mask.LoadFile('{0}/{1}.png'.format(self.patient_id, self.imagenum), wx.BITMAP_TYPE_ANY)
         else:
-            last_date = os.stat(CURRENT_MASK)[8]
-            waited = 0
-            while last_date == os.stat(CURRENT_MASK)[8]:
-                if waited > 1:
-                    return
-                time.sleep(0.1)
-                waited += 0.1
+            if os.path.exists(CURRENT_MASK):
+                last_date = os.stat(CURRENT_MASK)[8]
+                waited = 0
+                while last_date == os.stat(CURRENT_MASK)[8]:
+                    if waited > 1:
+                        return
+                    time.sleep(0.1)
+                    waited += 0.1
 
-            self.mask.LoadFile(CURRENT_MASK, wx.BITMAP_TYPE_ANY)
-            self.save_current_mask(self.mask)
+                self.mask.LoadFile(CURRENT_MASK, wx.BITMAP_TYPE_ANY)
 
         self.DrawMask()
 
@@ -99,6 +99,7 @@ class plugin:
     def DrawMask(self):
         """Draws predicted mask """
         self.gc.DrawBitmap(self.mask, 0, 0, 400,400)
+        self.save_current_mask(self.mask)
 
     def save_current_image(self):
         self.image = self.images[self.imagenum-1].GetImage()
