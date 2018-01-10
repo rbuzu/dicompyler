@@ -1,0 +1,10 @@
+version: '3'
+services:
+  orthanc:
+    image: jodogne/orthanc-plugins
+    ports:
+    - "8042:8042"
+    - "4242:4242"
+    volumes:
+    - "./dbdata:/var/lib/orthanc/db/"
+
